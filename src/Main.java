@@ -173,7 +173,7 @@ public class Main {
                         String title = scan.nextLine();
                         System.out.println("Обновите описание: ");
                         String description = scan.nextLine();
-                        Epic newEpic = new Epic(title, id, description, null);//Как получить статус из апдейт субепик???
+                        Epic newEpic = new Epic(title, id, description, null);
                         manager.updateEpic(newEpic);
                         System.out.println("Epic обновлен!");
                     } else {

@@ -120,6 +120,7 @@ public class Manager {
 
     public void clearAll () {
         allIds.clear();
+        epicsGoSubEpics.clear();
 
         if (!simpleTasks.isEmpty()) {
             simpleTasks.clear();
