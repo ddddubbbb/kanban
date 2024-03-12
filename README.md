@@ -19,12 +19,6 @@
 Нужно усовершенствовать приложение "Трекер задач" из ТЗ для 3-го и 4-го спринта (ветки: java-kanban-sprint3(-sprint4)
 -hw).
 
-<details> <summary> Задания 3-го и 4-го Спринта </summary> 
-
-1. [ТЗ 3-го Спринта](/https://github.com/ddddubbbb/java-kanban/tree/java-kanban-sprint3-hw?tab=readme-ov-file#java-kanban-sprint3-hw)
-2. [ТЗ 4-го Спринта](/https://github.com/ddddubbbb/java-kanban/tree/java-kanban-sprint4-hw?tab=readme-ov-file#java-kanban-sprint4-hw)
-</details>
-
 В этом спринте вам предстоит поработать с историей просмотров задач, а именно избавиться от повторных просмотров в ней и
 ограничения на размер истории.
 
