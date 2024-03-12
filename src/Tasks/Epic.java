@@ -1,32 +1,21 @@
-package Tasks;
+package tasks;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
-    protected ArrayList<Integer> subEpicIds = new ArrayList<>();
-    protected Boolean status;
+    private ArrayList<Integer> subTaskIds = new ArrayList<>();
 
-    public Epic(String title, int id, String description, Boolean status) {
-        super(title, id, description);
-        this.status = status;
+    public Epic(String title, int id, String description) {
+        super(title, id, description, "NEW");
     }
 
-    public ArrayList<Integer> getSubEpicIds() {
-        return subEpicIds;
+    public ArrayList<Integer> getSubTaskIds() {
+        return subTaskIds;
     }
 
-    public ArrayList<Integer> setSubEpicIds(ArrayList<Integer> subEpicIds) {
-        this.subEpicIds = subEpicIds;
-        return subEpicIds;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Boolean isStatus() {
-        return status;
+    public void setSubTaskIds(ArrayList<Integer> subTaskIds) {
+        this.subTaskIds = subTaskIds;
     }
 
     @Override
@@ -35,7 +24,7 @@ public class Epic extends Task {
                 "Название: '" + title + '\'' +
                 ". Описание: '" + description + '\'' +
                 ". ID: '" + id +
-                "'. ID подзадач: '" + subEpicIds +
+                "'. ID подзадач: '" + subTaskIds +
                 "'. Статус: '" + status + '\'' +
                 '}' + "\n";
     }
@@ -46,11 +35,11 @@ public class Epic extends Task {
         if (!(o instanceof Epic)) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return getSubEpicIds().equals(epic.getSubEpicIds()) && status.equals(epic.status);
+        return getSubTaskIds().equals(epic.getSubTaskIds());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getSubEpicIds(), status);
+        return Objects.hash(super.hashCode(), getSubTaskIds());
     }
 }

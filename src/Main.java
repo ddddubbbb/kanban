@@ -1,8 +1,9 @@
-import java.util.Scanner;
+import manager.Manager;
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
 
-import Tasks.Epic;
-import Tasks.SimpleTask;
-import Tasks.SubEpic;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,229 +14,248 @@ public class Main {
             String noCommand = "Такой команды нет, поробуйте снова.";
             String noId = "с таким ID Отсутствует! Пробуйте снова.";
             String empty = "Список задач пауст.";
-            String symbols = "Обозначения статусов в задачах: " + "\n" + "   null = новая" + "\n" +
-                    "   true = в процессе" + "\n" + "   false = завершена";
 
             printMenu();
             int command = scan.nextInt();
 
             if (command == 1) {
-                if (manager.checkForEmpty()) {
+
+                if (manager.isEmpty()) {
                     System.out.println(empty);
-
-                } else {
-                    printSubMenu();
-
-                    int subCommand = scan.nextInt();
-                    if (subCommand == 1) {
-                        if (manager.simpleTaskIds.isEmpty()) {
-                            System.out.println(empty);
-                        } else {
-                            System.out.println(manager.simpleTasks);
-                            System.out.println(symbols);
-                        }
-                    } else if (subCommand == 2) {
-                        if (manager.epics.isEmpty()) {
-                            System.out.println(empty);
-                        } else {
-                            System.out.println(manager.epics);
-                            System.out.println(symbols);
-                        }
-                    } else if (subCommand == 3) {
-                        if (manager.subEpics.isEmpty()) {
-                            System.out.println(empty);
-                        } else {
-                            System.out.println(manager.subEpics);
-                            System.out.println(symbols);
-                        }
-                    } else {
-                        System.out.println(noCommand);
-                    }
                 }
+
+                System.out.println(manager.getTasksMap());
+                System.out.println(manager.getEpicsMap());
+                System.out.println(manager.getSubTasksMap());
+
             } else if (command == 2) {
-                if (manager.checkForEmpty()) {
+
+                if (manager.isEmpty()) {
                     System.out.println(empty);
+
                 } else {
-                    System.out.println("Список всех доступных ID: " + manager.allIds);
+                    System.out.println("Список всех доступных Task ID: " + manager.getTasksMap().keySet() + ", "
+                            + "Epic ID: " + manager.getEpicsMap().keySet() + ", "
+                            + " SubTask ID: " + manager.getTasksMap().keySet() + ".");
                     System.out.println("Введите ID задачи: ");
                     int scanID = scan.nextInt();
-                    if (manager.simpleTasks.containsKey(scanID)) {
-                        System.out.println(manager.simpleTasks.get(scanID));
-                        System.out.println(symbols);
-                    } else if (manager.epics.containsKey(scanID)) {
-                        System.out.println(manager.epics.get(scanID));
-                        System.out.println(symbols);
-                    } else if (manager.subEpics.containsKey(scanID)) {
-                        System.out.println(manager.subEpics.get(scanID));
-                        System.out.println(symbols);
+                    if (manager.getTasksMap().containsKey(scanID)) {
+                        System.out.println(manager.getTaskForId(scanID));
+
+                    } else if (manager.getEpicsMap().containsKey(scanID)) {
+                        System.out.println(manager.getEpicForId(scanID));
+
+                    } else if (manager.getSubTasksMap().containsKey(scanID)) {
+                        System.out.println(manager.getSubTaskForId(scanID));
+
                     } else {
                         System.out.println("Задача " + noId);
                     }
                 }
 
             } else if (command == 3) {
-                if (manager.epics.isEmpty()) {
+
+                if (manager.isEmpty()) {
                     System.out.println(empty);
+
                 } else {
-                    System.out.println("Список всех Epic'ов по ID: " + manager.epicIds);
+                    System.out.println("Список всех Epic'ов по ID: " + manager.getEpicsMap().keySet());
                     System.out.println("Введите ID задачи (Epic)");
                     int epicID = scan.nextInt();
-                    if (manager.epics.containsKey(epicID)) {
-                        System.out.println(manager.epics.get(epicID).getSubEpicIds());
+                    if (manager.getEpicsMap().containsKey(epicID)) {
+                        manager.getSubTaskInEpic(epicID);
+                        System.out.println(manager.getEpicsMap().get(epicID).getSubTaskIds());
                         System.out.println("        Для задачи : ");
-                        System.out.println(manager.epics.get(epicID));
+                        System.out.println(manager.getEpicsMap().get(epicID));
                         System.out.println("    Список подзадач: ");
-                        for (Integer i : manager.epics.get(epicID).getSubEpicIds()) {
-                            System.out.println("    " + manager.subEpics.get(i));
-                        }
-                        System.out.println(symbols);
+                        System.out.println("    " + manager.getSubTaskInEpic(epicID));
+
                     } else {
                         System.out.println("Задача " + noId);
                     }
                 }
 
             } else if (command == 4) {
+
                 System.out.println("Какую задачу хотите создать?");
                 printSubMenu();
+
                 int subCommand = scan.nextInt();
+
                 if (subCommand == 1) {
-                    System.out.println(" Для нового Simple Task'а ");
+
+                    System.out.println(" Для нового Task'а ");
                     System.out.println("Введите название: ");
                     scan.nextLine();
                     String title = scan.nextLine();
                     System.out.println("Введите описание: ");
                     String description = scan.nextLine();
-                    SimpleTask newSimpleTask = new SimpleTask(title, 0, description, null);
-                    System.out.println("Simple Task с ID '" + manager.createSimpleTask(newSimpleTask) + "' создан!");
+                    Task newTask = new Task(title, 0, description, "NEW");
+                    System.out.println("Task с ID '" + manager.createTask(newTask) + "' создан!");
+
                 } else if (subCommand == 2) {
+
                     System.out.println(" Для нового Epic'а ");
                     System.out.println("Введите название: ");
                     scan.nextLine();
                     String title = scan.nextLine();
                     System.out.println("Введите описание: ");
                     String description = scan.nextLine();
-                    Epic newEpic = new Epic(title, 0, description, null);
+                    Epic newEpic = new Epic(title, 0, description);
                     System.out.println("Sub Epic с ID '" + manager.createEpic(newEpic) + "' создан!");
+
                 } else if (subCommand == 3) {
-                    if (manager.epics.isEmpty()) {
-                        System.out.println("Для создания SubEpic'а нужен Epic.");
+
+                    if (manager.getEpicsMap().isEmpty()) {
+                        System.out.println("Для создания SubTask'а нужен Epic.");
                         System.out.println("Сначала создайте Epic!");
                     } else {
-                        System.out.println("К какому Epic'у будет отнесен ваш SubEpic?");
+                        System.out.println("К какому Epic'у будет отнесен ваш SubTask?");
                         System.out.println("Введите ID Epic'a: ");
-                        System.out.println("Список доступных ID: " + manager.epicIds);
+                        System.out.println("Список доступных ID: " + manager.getEpicsMap().keySet());
                         int epicId = scan.nextInt();
-
-                        System.out.println("Введите название SubEpic'а: ");
-                        scan.nextLine();
+                        if (!manager.getEpicsMap().containsKey(epicId)) {
+                            System.out.println("Epic " + noId);
+                            return;
+                        }
+                        System.out.println("Введите название SubTask'а: ");
                         String title = scan.nextLine();
+                        scan.nextLine();
                         System.out.println("Введите описание: ");
                         String description = scan.nextLine();
-                        SubEpic newSubEpic = new SubEpic(title, 0, description, epicId, null);
-                        System.out.println("SubEpic с ID '" + manager.createSubEpic(newSubEpic) + "' создан!");
+                        SubTask newSubTask = new SubTask(title, 0, description, epicId, "NEW");
+                        System.out.println("SubTask с ID '" + manager.createSubTask(newSubTask) + "' создан!");
                     }
                 } else {
                     System.out.println(noCommand);
                 }
 
             } else if (command == 5) {
+
                 System.out.println("Какую задачу хотите обновить?");
                 printSubMenu();
                 int subCommand = scan.nextInt();
+
                 if (subCommand == 1) {
-                    System.out.println(" Для обновления Simple Task'а ");
+
+                    System.out.println(" Для обновления Task'а ");
                     System.out.println(" Введите ID ");
-                    System.out.println("Список доступных ID: " + manager.simpleTaskIds);
+                    System.out.println("Список доступных ID: " + manager.getTasksMap().keySet());
                     int id = scan.nextInt();
-                    if (manager.simpleTasks.containsKey(id)) {
+                    if (manager.getTasksMap().containsKey(id)) {
                         System.out.println("Обновите название: ");
-                        scan.nextLine();
                         String title = scan.nextLine();
+                        scan.nextLine();
                         System.out.println("Обновите описание: ");
                         String description = scan.nextLine();
                         System.out.println("Введите статус в формате: ");
-                        System.out.println("для 'НОВОГО' - null, для 'В ПРОЦЕССЕ' - true, для 'ЗАВЕРШЕНО' - false");
-                        Boolean status = scan.nextBoolean();
-                        SimpleTask newSimpleTask = new SimpleTask(title, id, description, status);
-                        manager.updateSimpleTask(newSimpleTask);
-                        System.out.println("Simple Task обновлен!");
+                        System.out.println("для 'НОВОГО' - NEW, для 'В ПРОЦЕССЕ' - IN_PROCESS, для 'ЗАВЕРШЕНО' - DONE");
+                        String status = scan.nextLine();
+                        Task newTask = new Task(title, id, description, status);
+                        manager.updateTask(newTask);
+                        System.out.println("Task обновлен!");
                     } else {
-                        System.out.println("Simple Task " + noId);
+                        System.out.println("Task " + noId);
                     }
+
                 } else if (subCommand == 2) {
+
                     System.out.println(" Для обновления Epica'а ");
                     System.out.println(" Введите ID ");
-                    System.out.println("Список доступных ID: " + manager.epicIds);
+                    System.out.println("Список доступных ID: " + manager.getEpicsMap().keySet());
                     int id = scan.nextInt();
-                    if (manager.epics.containsKey(id)) {
+                    if (manager.getEpicsMap().containsKey(id)) {
                         System.out.println("Обновите название: ");
-                        scan.nextLine();
                         String title = scan.nextLine();
                         System.out.println("Обновите описание: ");
                         String description = scan.nextLine();
-                        Epic newEpic = new Epic(title, id, description, null);
+                        Epic newEpic = new Epic(title, id, description);
                         manager.updateEpic(newEpic);
+                        manager.updateEpicStatus(id);
                         System.out.println("Epic обновлен!");
                     } else {
                         System.out.println("Epic " + noId);
                     }
+
                 } else if (subCommand == 3) {
-                    System.out.println(" Для обновления SubEpica'а ");
+
+                    System.out.println(" Для обновления SubTaska'а ");
                     System.out.println(" Введите ID ");
-                    System.out.println("Список доступных ID: " + manager.subEpicIds);
+                    System.out.println("Список доступных ID: " + manager.getSubTasksMap().keySet());
                     int id = scan.nextInt();
-                    if (manager.subEpics.containsKey(id)) {
+                    if (manager.getSubTasksMap().containsKey(id)) {
                         System.out.println("Обновите название: ");
-                        scan.nextLine();
                         String title = scan.nextLine();
+                        scan.nextLine();
                         System.out.println("Обновите описание: ");
                         String description = scan.nextLine();
-
                         System.out.println("Обновите статус в формате: ");
-                        System.out.println("для 'НОВОГО' - null, для 'В ПРОЦЕССЕ' - true, для 'ЗАВЕРШЕНО' - false");
-                        Boolean status = scan.nextBoolean();
+                        System.out.println("для 'НОВОГО' - NEW, для 'В ПРОЦЕССЕ' - IN_PROCESS, для 'ЗАВЕРШЕНО' - DONE");
+                        String status = scan.nextLine();
                         int epicId = manager.getSubIdById(id);
-                        SubEpic newSubEpic = new SubEpic(title, id, description, epicId, status);
-                        manager.updateSubEpic(newSubEpic);
-                        System.out.println("SubEpic обновлен!");
+                        SubTask newSubTask = new SubTask(title, id, description, epicId, status);
+                        manager.updateSubTask(newSubTask);
+                        System.out.println("SubTask обновлен!");
                     } else {
-                        System.out.println("SubEpic " + noId);
+                        System.out.println("SubTask " + noId);
                     }
                 } else {
                     System.out.println(noCommand);
                 }
 
             } else if (command == 6) {
-                if (manager.checkForEmpty()) {
+
+                String status = null;
+                if (manager.isEmpty()) {
                     System.out.println(empty);
+
                 } else {
-                    System.out.println("Список всех доступных ID: " + manager.allIds);
+                    System.out.println("Список всех доступных Task ID: " + manager.getTasksMap().keySet() + ", "
+                            + "Epic ID: " + manager.getEpicsMap().keySet() + ", "
+                            + " SubTask ID: " + manager.getTasksMap().keySet() + ".");
                     System.out.println("Чтобы узнать статус задачи - введите ID: ");
                     int id = scan.nextInt();
-                    System.out.println(symbols);
                     System.out.println();
-                    System.out.println("Статус задачи " + id + " = ");
-                    manager.getStatusByIds(id);
-                }
 
-            } else if (command == 7) {
-                if (manager.checkForEmpty()) {
-                    System.out.println(empty);
-                } else {
-                    System.out.println("Список всех доступных ID: " + manager.allIds);
-                    System.out.println("Если вы удаляете Epic, в нем будут удалены все SubEpic'и!!!");
-                    System.out.println("Чтобы удалить задачу - введите её ID: ");
-
-                    int id = scan.nextInt();
-                    if (manager.allIds.contains(id)) {
-                        manager.removeForId(id);
+                    if (manager.getTasksMap().containsKey(id)) {
+                        status = manager.getTaskStatusById(id);
+                    } else if (manager.getEpicsMap().containsKey(id)) {
+                        status = manager.getEpicStatusById(id);
+                    } else if (manager.getSubTasksMap().containsKey(id)) {
+                        status = manager.getSubTaskStatusById(id);
                     } else {
                         System.out.println("Задача " + noId);
                     }
+                    System.out.println("Статус задачи " + id + " = " + status);
+                }
+
+            } else if (command == 7) {
+
+                if (manager.isEmpty()) {
+                    System.out.println(empty);
+
+                } else {
+                    System.out.println("Список всех доступных Task ID: " + manager.getTasksMap().keySet() + ", "
+                            + "Epic ID: " + manager.getEpicsMap().keySet() + ", "
+                            + " SubTask ID: " + manager.getSubTasksMap().keySet() + ".");
+                    System.out.println("Если вы удаляете Epic, в нем будут удалены все SubTask'и!!!");
+                    System.out.println("Чтобы удалить задачу - введите её ID: ");
+                    int id = scan.nextInt();
+
+                    if (manager.getTasksMap().containsKey(id)) {
+                        manager.taskRemoveForId(id);
+                    } else if (manager.getSubTasksMap().containsKey(id)) {
+                        manager.subTaskRemoveForId(id);
+                    } else if (manager.getEpicsMap().containsKey(id)) {
+                        manager.epicRemoveForId(id);
+                    } else {
+                        System.out.println("Задача " + noId);
+                    }
+                    System.out.println("Задача № " + id + " удалена!");
                 }
 
             } else if (command == 8) {
-                if (manager.allIds.isEmpty()) {
+                if (manager.isEmpty()) {
                     System.out.println(empty);
                 } else {
                     System.out.println("Вы уверены, что хотите удалить ВСЕ задачи?");
@@ -252,6 +272,7 @@ public class Main {
                 }
 
             } else if (command == 0) {
+
                 System.out.println("До свидания!");
                 break;
             } else {
@@ -262,13 +283,13 @@ public class Main {
 
     public static void printMenu() {
         System.out.println();
-        System.out.println("Программа `Трекер задач` v 1.0");
+        System.out.println("Программа `Трекер задач` v 1.4");
         System.out.println();
         System.out.println("  =Ниже на ваш выбор приведены операции с задачами=");
         System.out.println();
         System.out.println("1 -    Получить списки задач");
         System.out.println("2 -    Получить задачу по ID");
-        System.out.println("3 -    Получить все подзадачи (SubEpic) в задаче (Epic)");
+        System.out.println("3 -    Получить все подзадачи (SubTask) в задаче (Epic)");
         System.out.println("4 -    Создать задачу");
         System.out.println("5 -    Обновить задачу");
         System.out.println("6 -    Узнать статус по ID");
@@ -282,8 +303,8 @@ public class Main {
 
     public static void printSubMenu() {
         System.out.println("Выберете задачи:");
-        System.out.println("1 - Простые задачи (Simple Task)");
+        System.out.println("1 - Простые задачи (Task)");
         System.out.println("2 - Задачи с подзадачами (Epic)");
-        System.out.println("3 - Подзадачи (SubEpic)");
+        System.out.println("3 - Подзадачи (SubTask)");
     }
 }
