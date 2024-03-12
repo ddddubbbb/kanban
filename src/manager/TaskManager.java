@@ -76,5 +76,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    void updateEpicStatus(int id);
+    void updateEpicStatus(int id); //нужен для работы меню main:178
 }

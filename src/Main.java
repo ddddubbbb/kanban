@@ -1,4 +1,6 @@
-import manager.*;
+import manager.HistoryManager;
+import manager.Managers;
+import manager.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -10,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         TaskManager inMemoryTaskManager = Managers.getDefault();
         HistoryManager inMemoryHistoryManager = Managers.getHistoryDefault();
+
         Scanner scan = new Scanner(System.in);
 
         while (true) {
@@ -174,7 +177,7 @@ public class Main {
                         String description = scan.nextLine();
                         Epic newEpic = new Epic(title, id, description);
                         inMemoryTaskManager.updateEpic(newEpic);
-                        inMemoryTaskManager.updateEpicStatus(id);
+                        inMemoryTaskManager.updateEpicStatus(id);//TaskManager :76/ InMemoryTaskManager:226
                         System.out.println("Epic обновлен!");
                     } else {
                         System.out.println("Epic " + noId);
@@ -239,7 +242,7 @@ public class Main {
                     System.out.println(empty);
 
                 } else {
-                    System.out.println("Cписок последних 10 просмотренных задач по их идентификатору (из пункта меню #2):");
+                    System.out.println("Cписок последних просмотренных задач по их идентификатору (из пункта меню #2):");
                     System.out.println(inMemoryHistoryManager.getHistory());
                 }
 
@@ -318,7 +321,7 @@ public class Main {
 
     public static void printMenu() {
         System.out.println();
-        System.out.println("Программа `Трекер задач` v 2.3");
+        System.out.println("Программа `Трекер задач` v 5.2");
         System.out.println();
         System.out.println("  =Ниже на ваш выбор приведены операции с задачами=");
         System.out.println();
@@ -328,7 +331,7 @@ public class Main {
         System.out.println("4  -    Создать задачу");
         System.out.println("5  -    Обновить задачу");
         System.out.println("6  -    Узнать статус задачи по ID");
-        System.out.println("7  -    Узнать список последних 10 просмотров задач (из п. #2)");
+        System.out.println("7  -    Узнать список просмотренных задач (из п. #2)");
         System.out.println();
         System.out.println("8  -             Удалить задачу по ID");
         System.out.println("9  -             Удалить задачу по типу(Epic/SubTask/Task)");
