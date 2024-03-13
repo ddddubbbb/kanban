@@ -1,11 +1,13 @@
-package manager;
+package managers.history;
 
+import node.Node;
 import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final CustomLinkedList<Task> customHistoryTask = new CustomLinkedList<>();

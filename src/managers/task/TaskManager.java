@@ -1,14 +1,23 @@
-package manager;
+package managers.task;
 
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
-import tasks.TaskStatus;
+import enums.TaskStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public interface TaskManager {
+
+    Task createTask(Task task);
+
+    Epic createEpic(Epic epic);
+
+    SubTask createSubTask(SubTask subTask);
+
 
     HashMap<Integer, SubTask> getSubTasksMap();
 
@@ -16,11 +25,13 @@ public interface TaskManager {
 
     HashMap<Integer, Task> getTasksMap();
 
+
     List<Task> getTasks();
 
     List<SubTask> getSubTasks();
 
     public List<Epic> getEpics();
+
 
     Task getTaskForId(Integer id);
 
@@ -28,15 +39,7 @@ public interface TaskManager {
 
     SubTask getSubTaskForId(Integer id);
 
-
     List<SubTask> getSubTaskInEpic(Integer epicId);
-
-
-    int createTask(Task task);
-
-    int createEpic(Epic epic);
-
-    Integer createSubTask(SubTask subTask);
 
 
     void updateTask(Task task);
@@ -69,12 +72,15 @@ public interface TaskManager {
 
     TaskStatus getSubTaskStatusById(Integer id);
 
-    int getSubIdById(int id);
 
+    int getSubIdById(int id);
 
     Boolean isEmpty();
 
     List<Task> getHistory();
+
+    Map<Integer, Task> getFileBackedTasksMap();
+
 
     void updateEpicStatus(int id); //нужен для работы меню main:178
 }

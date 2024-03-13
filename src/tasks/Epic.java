@@ -1,13 +1,19 @@
 package tasks;
 
+import enums.TaskStatus;
+import enums.TaskTypes;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 public class Epic extends Task {
     private ArrayList<Integer> subTaskIds = new ArrayList<>();
+    private final TaskTypes type;
 
     public Epic(String title, int id, String description) {
         super(title, id, description, TaskStatus.NEW);
+        this.type = TaskTypes.EPIC;
     }
 
     public ArrayList<Integer> getSubTaskIds() {
@@ -41,5 +47,11 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getSubTaskIds());
+    }
+
+    @Override
+    public String toStringFileBacked() {
+        return String.format("%s,%s,%s,%s,%s,%s",
+                id, type, title, status, description, subTaskIds.toString().replace("[", "").replace("]", "").replace(" ", "") + "\n");
     }
 }

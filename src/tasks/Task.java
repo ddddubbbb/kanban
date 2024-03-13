@@ -1,19 +1,27 @@
 package tasks;
 
+import enums.TaskStatus;
+import enums.TaskTypes;
+
 import java.util.Objects;
+
 
 public class Task {
     protected String title;
     protected int id;
     protected String description;
     protected TaskStatus status;
+    protected TaskTypes type;
+
 
     public Task(String title, int id, String description, TaskStatus status) {
         this.title = title;
         this.id = id;
         this.description = description;
         this.status = status;
+        this.type = TaskTypes.TASK;
     }
+
 
     public String getTitle() {
         return title;
@@ -23,7 +31,7 @@ public class Task {
         this.title = title;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -45,6 +53,10 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public TaskTypes getType() {
+        return type;
     }
 
     @Override
@@ -70,4 +82,10 @@ public class Task {
     public int hashCode() {
         return Objects.hash(getTitle(), getId(), getDescription(), getStatus());
     }
+
+    public String toStringFileBacked() {
+        return String.format("%s,%s,%s,%s,%s,%s",
+                id, type, title, status, description, " " + "\n");
+    }
+
 }
