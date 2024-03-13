@@ -1,13 +1,22 @@
 package tasks;
 
+import enums.TaskStatus;
+import enums.TaskTypes;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static enums.TaskTypes.EPIC;
+
 
 public class Epic extends Task {
     private ArrayList<Integer> subTaskIds = new ArrayList<>();
 
-    public Epic(String title, int id, String description) {
-        super(title, id, description, TaskStatus.NEW);
+    public Epic(String title, int id, String description, LocalDateTime startTime, Duration duration) {
+        super(title, id, description, TaskStatus.NEW, startTime, duration);
+        super.setType(EPIC);
     }
 
     public ArrayList<Integer> getSubTaskIds() {
@@ -19,6 +28,11 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    @Override
     public String toString() {
         return "Задача (Epic){" +
                 "Название: '" + title + '\'' +
@@ -26,6 +40,9 @@ public class Epic extends Task {
                 ". ID: '" + id +
                 "'. ID подзадач: '" + subTaskIds +
                 "'. Статус: '" + status + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", duration='" + duration +
                 '}' + "\n";
     }
 
@@ -42,4 +59,13 @@ public class Epic extends Task {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getSubTaskIds());
     }
+
+    @Override
+    public String toStringFileBacked() {
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                id, type, title, status, description, startTime, duration, endTime, subTaskIds.toString()
+                        .replace("[", "").replace("]", "").replace(" ", "") + "\n");
+    }
+
+
 }
