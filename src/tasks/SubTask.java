@@ -1,13 +1,22 @@
 package tasks;
 
+import enums.TaskStatus;
+import enums.TaskTypes;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
+
 
 public class SubTask extends Task {
     private final int epicId;
+    private final TaskTypes type;
 
-    public SubTask(String title, int id, String description, int epicId, TaskStatus status) {
-        super(title, id, description, status);
+    public SubTask(String title, int id, String description, int epicId, TaskStatus status, LocalDateTime startTime,
+                   Duration duration) {
+        super(title, id, description, status, startTime, duration);
         this.epicId = epicId;
+        this.type = TaskTypes.SUBTASK;
     }
 
     public int getEpicId() {
@@ -19,9 +28,12 @@ public class SubTask extends Task {
         return "Подзадача (SubTask){" +
                 "Название: '" + title + '\'' +
                 ". Описание: '" + description + '\'' +
-                ". ID Подзадачи: '" + id +
-                "'. ID Задачи: '" + epicId +
+                ". ID: '" + id +
+                "'. Epic ID: '" + epicId +
                 "'. Статус: '" + status + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + getEndTime() + '\'' +
+                ", duration='" + duration +
                 '}' + "\n";
     }
 
@@ -37,5 +49,11 @@ public class SubTask extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getEpicId());
+    }
+
+    @Override
+    public String toStringFileBacked() {
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                id, type, title, status, description, startTime, duration, endTime, epicId + "\n");
     }
 }
