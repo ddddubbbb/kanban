@@ -7,7 +7,7 @@
 
 ### Этапы проектирования:
 <details> <summary> ТЗ </summary> 
-<details> <summary>java-kanban-sprint8-hw - последний спринт по Трекеру задач </summary> 
+<details> <summary>ветка -main- последний спринт по Трекеру задач </summary> 
 
 ### Задание спринта.
 
